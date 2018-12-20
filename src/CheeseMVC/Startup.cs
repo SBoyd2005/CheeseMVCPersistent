@@ -40,8 +40,12 @@ namespace CheeseMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, CheeseDbContext context)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
             loggerFactory.AddDebug();
+#pragma warning restore CS0618 // Type or member is obsolete
 
             if (env.IsDevelopment())
             {
@@ -61,7 +65,6 @@ namespace CheeseMVC
                     name: "default",
                     template: "{controller=Cheese}/{action=Index}/{id?}");
             });
-            context.Database.EnsureCreated();
         }
     }
 }
