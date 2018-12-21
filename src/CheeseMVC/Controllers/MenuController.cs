@@ -44,7 +44,7 @@ namespace CheeseMVC.Controllers
 
                 context.Menu.Add(newMenu);
                 context.SaveChanges();
-                return Redirect("/Menu/ViewMenu/" + newMenu.ID);
+                return Redirect($"/Menu/ViewMenu/{newMenu.ID}");
 
             }
 
@@ -54,7 +54,7 @@ namespace CheeseMVC.Controllers
 
         public IActionResult ViewMenu(int id)
         {
-            var menu = context.Menu.Single(m => m.ID == id);
+            Menu menu = context.Menu.Single(m => m.ID == id);
 
             List<CheeseMenu> items = context
                 .CheeseMenu
@@ -77,7 +77,8 @@ namespace CheeseMVC.Controllers
         {
             Menu menu = context.Menu.Single(m => m.ID == id);
             List<Cheese> cheeses = context.Cheeses.ToList();
-            return View(new AddMenuItemViewModel(menu, cheeses));
+            AddMenuItemViewModel addMenuItemViewModel = new AddMenuItemViewModel(menu, cheeses);
+            return View (addMenuItemViewModel);
         }
 
         [HttpPost]
@@ -104,13 +105,19 @@ namespace CheeseMVC.Controllers
                     context.CheeseMenu.Add(menuItem);
                     context.SaveChanges();
 
+                    return Redirect($"/Menu/ViewMenu/{menuItem.MenuID}");
+
+                }
+                else
+                {
+                    return Redirect($"/Menu/ViewMenu/{addMenuItemViewModel.MenuID}");
                 }
 
-                return Redirect(string.Format("/Menu/ViewMenu/{0}", addMenuItemViewModel.MenuID));
-                }
-
-                return View(addMenuItemViewModel);
+                
             }
-        }
+
+            return View(addMenuItemViewModel);
+        }    
     }
+}
 
